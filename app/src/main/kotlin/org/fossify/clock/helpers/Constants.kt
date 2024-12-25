@@ -161,6 +161,7 @@ fun getAllTimeZones() = arrayListOf(
     MyTimeZone(28, "GMT-01:00 Cape Verde", "Atlantic/Cape_Verde"),
     MyTimeZone(29, "GMT+00:00 Casablanca", "Africa/Casablanca"),
     MyTimeZone(30, "GMT+00:00 Greenwich Mean Time", "Etc/Greenwich"),
+    MyTimeZone(90, "GMT+00:00 London", "Europe/London"),
     MyTimeZone(31, "GMT+01:00 Amsterdam", "Europe/Amsterdam"),
     MyTimeZone(32, "GMT+01:00 Belgrade", "Europe/Belgrade"),
     MyTimeZone(33, "GMT+01:00 Brussels", "Europe/Brussels"),
