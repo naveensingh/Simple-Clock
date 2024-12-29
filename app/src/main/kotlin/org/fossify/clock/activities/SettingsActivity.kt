@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import org.fossify.clock.databinding.ActivitySettingsBinding
 import org.fossify.clock.extensions.config
+import org.fossify.clock.extensions.updateWidgets
 import org.fossify.clock.helpers.DEFAULT_MAX_ALARM_REMINDER_SECS
 import org.fossify.clock.helpers.DEFAULT_MAX_TIMER_REMINDER_SECS
 import org.fossify.commons.extensions.*
@@ -34,6 +35,7 @@ class SettingsActivity : SimpleActivity() {
         setupCustomizeColors()
         setupUseEnglish()
         setupLanguage()
+        setupHourFormat()
         setupPreventPhoneFromSleeping()
         setupSundayFirst()
         setupAlarmMaxReminder()
@@ -83,6 +85,15 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsLanguageHolder.beVisibleIf(isTiramisuPlus())
         binding.settingsLanguageHolder.setOnClickListener {
             launchChangeAppLanguageIntent()
+        }
+    }
+
+    private fun setupHourFormat() = binding.apply {
+        settingsHourFormat.isChecked = config.use24HourFormat
+        settingsHourFormatHolder.setOnClickListener {
+            settingsHourFormat.toggle()
+            config.use24HourFormat = settingsHourFormat.isChecked
+            updateWidgets()
         }
     }
 

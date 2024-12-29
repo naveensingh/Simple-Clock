@@ -34,7 +34,7 @@ class EditAlarmDialog(val activity: SimpleActivity, val alarm: Alarm, val onDism
         binding.apply {
             editAlarmTime.setOnClickListener {
                 if (activity.config.isUsingSystemTheme) {
-                    val timeFormat = if (DateFormat.is24HourFormat(activity)) {
+                    val timeFormat = if (activity.config.use24HourFormat) {
                         TimeFormat.CLOCK_24H
                     } else {
                         TimeFormat.CLOCK_12H
@@ -59,7 +59,7 @@ class EditAlarmDialog(val activity: SimpleActivity, val alarm: Alarm, val onDism
                         timeSetListener,
                         alarm.timeInMinutes / 60,
                         alarm.timeInMinutes % 60,
-                        DateFormat.is24HourFormat(activity)
+                        activity.config.use24HourFormat
                     ).show()
                 }
             }

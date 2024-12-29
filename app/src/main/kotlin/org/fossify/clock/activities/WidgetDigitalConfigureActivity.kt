@@ -84,6 +84,10 @@ class WidgetDigitalConfigureActivity : SimpleActivity() {
         }
 
         updateTextColor()
+
+        val clockFormat = if (config.use24HourFormat) "HH:mm" else "K:mm a"
+        binding.configDigitalTime.format24Hour = clockFormat
+        binding.configDigitalTime.format12Hour = clockFormat
     }
 
     private fun saveConfig() {

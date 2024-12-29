@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
+import android.view.View
 import android.widget.RemoteViews
 import org.fossify.clock.R
 import org.fossify.clock.activities.SplashActivity
@@ -42,6 +43,10 @@ class MyDigitalTimeWidgetProvider : AppWidgetProvider() {
         views.apply {
             setText(R.id.widget_next_alarm, nextAlarm)
             setVisibleIf(R.id.widget_alarm_holder, nextAlarm.isNotEmpty())
+            val clockToHide = if (context.config.use24HourFormat) R.id.widget_text_clock_12 else R.id.widget_text_clock_24
+            val clockToShow = if (context.config.use24HourFormat) R.id.widget_text_clock_24 else R.id.widget_text_clock_12
+            setViewVisibility(clockToHide, View.GONE)
+            setViewVisibility(clockToShow, View.VISIBLE)
         }
     }
 
@@ -51,7 +56,8 @@ class MyDigitalTimeWidgetProvider : AppWidgetProvider() {
 
         views.apply {
             applyColorFilter(R.id.widget_background, config.widgetBgColor)
-            setTextColor(R.id.widget_text_clock, widgetTextColor)
+            setTextColor(R.id.widget_text_clock_24, widgetTextColor)
+            setTextColor(R.id.widget_text_clock_12, widgetTextColor)
             setTextColor(R.id.widget_date, widgetTextColor)
             setTextColor(R.id.widget_next_alarm, widgetTextColor)
 

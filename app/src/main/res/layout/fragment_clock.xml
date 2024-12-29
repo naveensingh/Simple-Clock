@@ -16,8 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_margin"
-            android:format12Hour="h:mm:ss a"
-            android:format24Hour="k:mm:ss"
             android:gravity="center_horizontal"
             android:textSize="@dimen/clock_text_size"
             tools:text="00:00:00" />

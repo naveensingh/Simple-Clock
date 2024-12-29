@@ -26,7 +26,7 @@
         tools:ignore="UnusedAttribute">
 
         <TextClock
-            android:id="@+id/widget_text_clock"
+            android:id="@+id/widget_text_clock_24"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
@@ -34,8 +34,8 @@
             android:autoSizeMinTextSize="2sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
-            android:format12Hour="h:mm"
-            android:format24Hour="k:mm"
+            android:format12Hour="HH:mm"
+            android:format24Hour="HH:mm"
             android:gravity="center"
             android:includeFontPadding="false"
             android:maxLines="1"
@@ -44,6 +44,26 @@
             android:shadowRadius="1"
             android:textSize="@dimen/normal_text_size"
             tools:text="00:00" />
+
+        <TextClock
+            android:id="@+id/widget_text_clock_12"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:autoSizeMaxTextSize="300sp"
+            android:autoSizeMinTextSize="2sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:format12Hour="k:mm a"
+            android:format24Hour="k:mm a"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:shadowColor="@android:color/black"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:textSize="@dimen/normal_text_size"
+            tools:text="0:00 AM" />
 
         <TextClock
             android:id="@+id/widget_date"

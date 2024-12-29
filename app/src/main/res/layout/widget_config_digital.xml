@@ -32,8 +32,6 @@
                 android:id="@+id/config_digital_time"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/widget_digital_time_height"
-                android:format12Hour="h:mm"
-                android:format24Hour="k:mm"
                 android:gravity="center_horizontal"
                 android:includeFontPadding="false"
                 android:shadowColor="@android:color/black"

@@ -134,6 +134,21 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/settings_hour_format_holder"
+                style="@style/SettingsHolderCheckboxStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyAppCompatCheckbox
+                    android:id="@+id/settings_hour_format"
+                    style="@style/SettingsCheckboxStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/use_24_hour_time_format" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/settings_prevent_phone_from_sleeping_holder"
                 style="@style/SettingsHolderCheckboxStyle"
                 android:layout_width="match_parent"
