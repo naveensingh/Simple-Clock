@@ -50,6 +50,8 @@
     <string name="timer_tab">Timer tab</string>
     <string name="show_seconds">Show seconds</string>
     <string name="increase_volume_gradually">Increase volume gradually</string>
+    <string name="settings_import_data">Import alarms and timers</string>
+    <string name="settings_export_data">Export alarms and timers</string>
 
     <!-- FAQ -->
     <string name="faq_1_title">How can I change lap sorting at the stopwatch tab?</string>

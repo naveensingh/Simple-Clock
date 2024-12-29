@@ -13,10 +13,7 @@ import org.fossify.clock.BuildConfig
 import org.fossify.clock.R
 import org.fossify.clock.adapters.ViewPagerAdapter
 import org.fossify.clock.databinding.ActivityMainBinding
-import org.fossify.clock.extensions.config
-import org.fossify.clock.extensions.getEnabledAlarms
-import org.fossify.clock.extensions.rescheduleEnabledAlarms
-import org.fossify.clock.extensions.updateWidgets
+import org.fossify.clock.extensions.*
 import org.fossify.clock.helpers.*
 import org.fossify.commons.databinding.BottomTablayoutItemBinding
 import org.fossify.commons.extensions.*
@@ -171,8 +168,10 @@ class MainActivity : SimpleActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
-        if (requestCode == PICK_AUDIO_FILE_INTENT_ID && resultCode == RESULT_OK && resultData != null) {
-            storeNewAlarmSound(resultData)
+        when {
+            requestCode == PICK_AUDIO_FILE_INTENT_ID && resultCode == RESULT_OK && resultData != null -> {
+                storeNewAlarmSound(resultData)
+            }
         }
     }
 
