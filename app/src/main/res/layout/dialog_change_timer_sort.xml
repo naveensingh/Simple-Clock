@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sorting_dialog_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:id="@+id/sorting_dialog_radio_sorting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:paddingStart="@dimen/activity_margin"
+        android:paddingTop="@dimen/activity_margin"
+        android:paddingEnd="@dimen/activity_margin">
+
+        <org.fossify.commons.views.MyCompatRadioButton
+            android:id="@+id/sorting_dialog_radio_creation_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/medium_margin"
+            android:paddingBottom="@dimen/medium_margin"
+            android:text="@string/sort_by_creation_order" />
+
+        <org.fossify.commons.views.MyCompatRadioButton
+            android:id="@+id/sorting_dialog_radio_timer_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/medium_margin"
+            android:paddingBottom="@dimen/medium_margin"
+            android:text="@string/sort_by_timer_duration" />
+
+    </RadioGroup>
+</ScrollView>

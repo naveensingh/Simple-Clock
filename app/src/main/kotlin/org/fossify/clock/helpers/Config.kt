@@ -57,6 +57,10 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getInt(ALARMS_SORT_BY, SORT_BY_CREATION_ORDER)
         set(alarmSort) = prefs.edit().putInt(ALARMS_SORT_BY, alarmSort).apply()
 
+    var timerSort: Int
+        get() = prefs.getInt(TIMERS_SORT_BY, SORT_BY_CREATION_ORDER)
+        set(timerSort) = prefs.edit().putInt(TIMERS_SORT_BY, timerSort).apply()
+
     var alarmMaxReminderSecs: Int
         get() = prefs.getInt(ALARM_MAX_REMINDER_SECS, DEFAULT_MAX_ALARM_REMINDER_SECS)
         set(alarmMaxReminderSecs) = prefs.edit().putInt(ALARM_MAX_REMINDER_SECS, alarmMaxReminderSecs).apply()
