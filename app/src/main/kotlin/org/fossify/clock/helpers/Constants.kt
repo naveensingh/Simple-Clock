@@ -24,6 +24,9 @@ const val ALARM_LAST_CONFIG = "alarm_last_config"
 const val TIMER_LAST_CONFIG = "timer_last_config"
 const val INCREASE_VOLUME_GRADUALLY = "increase_volume_gradually"
 const val ALARMS_SORT_BY = "alarms_sort_by"
+const val ALARMS_CUSTOM_SORTING = "alarms_custom_sorting"
+const val TIMERS_SORT_BY = "timers_sort_by"
+const val TIMERS_CUSTOM_SORTING = "timers_custom_sorting"
 const val STOPWATCH_LAPS_SORT_BY = "stopwatch_laps_sort_by"
 const val WAS_INITIAL_WIDGET_SET_UP = "was_initial_widget_set_up"
 
@@ -62,10 +65,11 @@ const val SORT_BY_LAP = 1
 const val SORT_BY_LAP_TIME = 2
 const val SORT_BY_TOTAL_TIME = 4
 
-// alarm sorting
+// alarm and timer sorting
 const val SORT_BY_CREATION_ORDER = 0
 const val SORT_BY_ALARM_TIME = 1
 const val SORT_BY_DATE_AND_TIME = 2
+const val SORT_BY_TIMER_DURATION = 3
 
 const val TODAY_BIT = -1
 const val TOMORROW_BIT = -2

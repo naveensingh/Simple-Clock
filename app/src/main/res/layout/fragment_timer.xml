@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/timer_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.fossify.commons.views.MyRecyclerView
-        android:id="@+id/timers_list"
+    <RelativeLayout
+        android:id="@+id/timer_holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/fab_list_bottom_padding"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="3"
-        tools:listitem="@layout/item_timer" />
+        android:layout_height="match_parent">
+
+        <org.fossify.commons.views.MyRecyclerView
+            android:id="@+id/timers_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="ifContentScrolls"
+            android:paddingBottom="@dimen/fab_list_bottom_padding"
+            android:scrollbars="none"
+            app:layoutManager="org.fossify.commons.views.MyLinearLayoutManager"
+            tools:listitem="@layout/item_timer" />
+
+    </RelativeLayout>
 
     <org.fossify.commons.views.MyFloatingActionButton
         android:id="@+id/timer_add"
@@ -26,13 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/activity_margin"
-        android:contentDescription="@string/new_timer"
-        android:src="@drawable/ic_plus_vector"
-        app:backgroundTint="@color/color_primary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="@color/pressed_item_foreground" />
+        android:src="@drawable/ic_plus_vector" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

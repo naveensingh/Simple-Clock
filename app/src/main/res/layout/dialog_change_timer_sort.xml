@@ -22,20 +22,12 @@
             android:text="@string/sort_by_creation_order" />
 
         <org.fossify.commons.views.MyCompatRadioButton
-            android:id="@+id/sorting_dialog_radio_alarm_time"
+            android:id="@+id/sorting_dialog_radio_timer_duration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/medium_margin"
             android:paddingBottom="@dimen/medium_margin"
-            android:text="@string/sort_by_alarm_time" />
-
-        <org.fossify.commons.views.MyCompatRadioButton
-            android:id="@+id/sorting_dialog_radio_day_and_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/medium_margin"
-            android:paddingBottom="@dimen/medium_margin"
-            android:text="@string/sort_by_day_and_alarm_time" />
+            android:text="@string/sort_by_timer_duration" />
 
         <org.fossify.commons.views.MyCompatRadioButton
             android:id="@+id/sorting_dialog_radio_custom"

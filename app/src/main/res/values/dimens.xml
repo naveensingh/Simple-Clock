@@ -11,10 +11,12 @@
     <dimen name="timer_button_small_size">50dp</dimen>
     <dimen name="timer_button_size">56dp</dimen>
     <dimen name="textview_drawable_size">24dp</dimen>
+    <dimen name="drag_handle_size">40dp</dimen>
 
     <dimen name="clock_text_size">70sp</dimen>
     <dimen name="clock_text_size_smaller">60sp</dimen>
     <dimen name="alarm_text_size">60sp</dimen>
+    <dimen name="timer_text_size">48sp</dimen>
     <dimen name="stopwatch_text_size">80sp</dimen>
     <dimen name="widget_time_text_size_small">48sp</dimen>
     <dimen name="widget_details_text_size">14sp</dimen>

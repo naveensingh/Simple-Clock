@@ -1,46 +1,49 @@
 package org.fossify.clock.adapters
 
+import android.annotation.SuppressLint
 import android.view.Menu
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import me.grantland.widget.AutofitHelper
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import org.fossify.clock.R
 import org.fossify.clock.activities.SimpleActivity
 import org.fossify.clock.databinding.ItemTimerBinding
-import org.fossify.clock.extensions.getFormattedDuration
-import org.fossify.clock.extensions.hideTimerNotification
-import org.fossify.clock.extensions.secondsToMillis
+import org.fossify.clock.extensions.*
 import org.fossify.clock.models.Timer
 import org.fossify.clock.models.TimerEvent
 import org.fossify.clock.models.TimerState
-import org.fossify.commons.adapters.MyRecyclerViewListAdapter
+import org.fossify.commons.adapters.MyRecyclerViewAdapter
 import org.fossify.commons.dialogs.PermissionRequiredDialog
 import org.fossify.commons.extensions.*
+import org.fossify.commons.helpers.SORT_BY_CUSTOM
+import org.fossify.commons.interfaces.ItemMoveCallback
+import org.fossify.commons.interfaces.ItemTouchHelperContract
+import org.fossify.commons.interfaces.StartReorderDragListener
 import org.fossify.commons.views.MyRecyclerView
 import org.greenrobot.eventbus.EventBus
 
 class TimerAdapter(
-    private val simpleActivity: SimpleActivity,
+    activity: SimpleActivity,
+    var timers: ArrayList<Timer>,
     recyclerView: MyRecyclerView,
-    onRefresh: () -> Unit,
-    onItemClick: (Timer) -> Unit,
-) : MyRecyclerViewListAdapter<Timer>(simpleActivity, recyclerView, diffUtil, onItemClick, onRefresh) {
+    itemClick: (Any) -> Unit,
+) : MyRecyclerViewAdapter(activity, recyclerView, itemClick), ItemTouchHelperContract {
 
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<Timer>() {
-            override fun areItemsTheSame(oldItem: Timer, newItem: Timer): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Timer, newItem: Timer): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
+    private var startReorderDragListener: StartReorderDragListener
 
     init {
         setupDragListener(true)
+
+        val touchHelper = ItemTouchHelper(ItemMoveCallback(this))
+        touchHelper.attachToRecyclerView(recyclerView)
+
+        startReorderDragListener = object : StartReorderDragListener {
+            override fun requestDrag(viewHolder: RecyclerView.ViewHolder) {
+                touchHelper.startDrag(viewHolder)
+            }
+        }
     }
 
     override fun getActionMenuId() = R.menu.cab_alarms
@@ -57,57 +60,76 @@ class TimerAdapter(
         }
     }
 
-    override fun getSelectableItemCount() = itemCount
+    override fun getSelectableItemCount() = timers.size
 
     override fun getIsItemSelectable(position: Int) = true
 
-    override fun getItemSelectionKey(position: Int) = getItem(position).id
+    override fun getItemSelectionKey(position: Int) = timers.getOrNull(position)?.id
 
-    override fun getItemKeyPosition(key: Int): Int {
-        var position = -1
-        for (i in 0 until itemCount) {
-            if (key == getItem(i).id) {
-                position = i
-                break
-            }
-        }
-        return position
+    override fun getItemKeyPosition(key: Int) = timers.indexOfFirst { it.id == key }
+
+    override fun onActionModeCreated() {
+        notifyDataSetChanged()
     }
 
-    override fun onActionModeCreated() {}
+    override fun onActionModeDestroyed() {
+        notifyDataSetChanged()
+    }
 
-    override fun onActionModeDestroyed() {}
+    override fun onRowClear(myViewHolder: ViewHolder?) {}
+
+    override fun onRowSelected(myViewHolder: ViewHolder?) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return createViewHolder(ItemTimerBinding.inflate(layoutInflater, parent, false).root)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindView(getItem(position), true, true) { itemView, _ ->
-            setupView(itemView, getItem(position))
+        val timer = timers[position]
+        holder.bindView(timer, true, true) { itemView, _ ->
+            setupView(itemView, timer, holder)
         }
         bindViewHolder(holder)
     }
 
+    override fun getItemCount() = timers.size
+
+    fun updateItems(newItems: ArrayList<Timer>) {
+        timers = newItems
+        notifyDataSetChanged()
+        finishActMode()
+    }
+
     private fun deleteItems() {
+        val timersToRemove = ArrayList<Timer>()
         val positions = getSelectedItemPositions()
-        val timersToRemove = positions.map { position ->
-            getItem(position)
+        getSelectedItems().forEach {
+            timersToRemove.add(it)
         }
+        timers.removeAll(timersToRemove)
         removeSelectedItems(positions)
         timersToRemove.forEach(::deleteTimer)
     }
 
-    private fun setupView(view: View, timer: Timer) {
+    private fun getSelectedItems() = timers.filter { selectedKeys.contains(it.id) } as ArrayList<Timer>
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupView(view: View, timer: Timer, holder: ViewHolder) {
         ItemTimerBinding.bind(view).apply {
             val isSelected = selectedKeys.contains(timer.id)
-            timerFrame.isSelected = isSelected
-
+            timerHolder.isSelected = isSelected
+            timerDragHandle.beVisibleIf(selectedKeys.isNotEmpty())
+            timerDragHandle.applyColorFilter(textColor)
+            timerDragHandle.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    startReorderDragListener.requestDrag(holder)
+                }
+                false
+            }
             timerLabel.setTextColor(textColor)
             timerLabel.setHintTextColor(textColor.adjustAlpha(0.7f))
             timerLabel.text = timer.label
 
-            AutofitHelper.create(timerTime)
             timerTime.setTextColor(textColor)
             timerTime.text = when (timer.state) {
                 is TimerState.Finished -> 0.getFormattedDuration()
@@ -148,17 +170,32 @@ class TimerAdapter(
             } else {
                 org.fossify.commons.R.drawable.ic_play_vector
             }
-            timerPlayPause.setImageDrawable(simpleActivity.resources.getColoredDrawableWithColor(drawableId, textColor))
+            timerPlayPause.setImageDrawable(activity.resources.getColoredDrawableWithColor(drawableId, textColor))
         }
     }
 
     private fun resetTimer(timer: Timer) {
         EventBus.getDefault().post(TimerEvent.Reset(timer.id!!))
-        simpleActivity.hideTimerNotification(timer.id!!)
+        activity.hideTimerNotification(timer.id!!)
     }
 
     private fun deleteTimer(timer: Timer) {
         EventBus.getDefault().post(TimerEvent.Delete(timer.id!!))
-        simpleActivity.hideTimerNotification(timer.id!!)
+        activity.hideTimerNotification(timer.id!!)
+    }
+
+    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
+        timers.swap(fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
+        saveAlarmsCustomOrder(timers)
+        if (activity.config.timerSort != SORT_BY_CUSTOM) {
+            activity.config.timerSort = SORT_BY_CUSTOM
+        }
+    }
+
+    private fun saveAlarmsCustomOrder(alarms: ArrayList<Timer>) {
+        val timersCustomSortingIds = alarms.map { it.id }
+
+        activity.config.timersCustomSorting = timersCustomSortingIds.joinToString { it.toString() }
     }
 }

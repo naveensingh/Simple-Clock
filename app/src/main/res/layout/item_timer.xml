@@ -1,77 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/timer_frame"
+    android:id="@+id/timer_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="@drawable/selector">
+    android:foreground="@drawable/selector"
+    android:paddingHorizontal="@dimen/activity_margin"
+    android:paddingVertical="@dimen/medium_margin">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <org.fossify.commons.views.MyTextView
+        android:id="@+id/timer_time"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/activity_margin"
-        android:paddingTop="@dimen/medium_margin"
-        android:paddingBottom="@dimen/activity_margin">
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:textSize="@dimen/timer_text_size"
+        app:layout_constraintEnd_toStartOf="@id/timer_reset"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="00:00:00" />
 
-        <TextView
-            android:id="@+id/timer_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textSize="@dimen/alarm_text_size"
-            app:layout_constraintEnd_toStartOf="@id/timer_reset"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="00:00" />
+    <org.fossify.commons.views.MyTextView
+        android:id="@+id/timer_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:textSize="@dimen/bigger_text_size"
+        app:layout_constraintEnd_toEndOf="@id/timer_time"
+        app:layout_constraintStart_toStartOf="@id/timer_time"
+        app:layout_constraintTop_toBottomOf="@id/timer_time"
+        tools:text="Cook rice" />
 
-        <org.fossify.commons.views.MyTextView
-            android:id="@+id/timer_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textSize="@dimen/bigger_text_size"
-            app:layout_constraintEnd_toEndOf="@id/timer_time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timer_time"
-            tools:text="Cook rice" />
+    <ImageView
+        android:id="@+id/timer_reset"
+        android:layout_width="@dimen/timer_button_small_size"
+        android:layout_height="@dimen/timer_button_small_size"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/medium_margin"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/normal_margin"
+        android:src="@drawable/ic_reset_vector"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/timer_play_pause"
+        app:layout_constraintEnd_toStartOf="@+id/timer_play_pause"
+        app:layout_constraintStart_toEndOf="@id/timer_time"
+        app:layout_constraintTop_toTopOf="@id/timer_play_pause" />
 
-        <ImageView
-            android:id="@+id/timer_reset"
-            android:layout_width="@dimen/timer_button_small_size"
-            android:layout_height="@dimen/timer_button_small_size"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:layout_marginEnd="@dimen/medium_margin"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/normal_margin"
-            android:src="@drawable/ic_reset_vector"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/timer_play_pause"
-            app:layout_constraintEnd_toStartOf="@+id/timer_play_pause"
-            app:layout_constraintStart_toEndOf="@id/timer_time"
-            app:layout_constraintTop_toTopOf="@id/timer_play_pause" />
+    <ImageView
+        android:id="@+id/timer_play_pause"
+        android:layout_width="@dimen/timer_button_size"
+        android:layout_height="@dimen/timer_button_size"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/activity_margin"
+        android:src="@drawable/ic_play_vector"
+        app:layout_constraintBottom_toBottomOf="@id/timer_drag_handle"
+        app:layout_constraintEnd_toStartOf="@id/timer_drag_handle"
+        app:layout_constraintStart_toEndOf="@id/timer_reset"
+        app:layout_constraintTop_toTopOf="@id/timer_drag_handle" />
 
-        <ImageView
-            android:id="@+id/timer_play_pause"
-            android:layout_width="@dimen/timer_button_size"
-            android:layout_height="@dimen/timer_button_size"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:layout_marginEnd="@dimen/small_margin"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_play_vector"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/timer_reset"
-            app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/timer_drag_handle"
+        android:layout_width="@dimen/drag_handle_size"
+        android:layout_height="@dimen/drag_handle_size"
+        android:contentDescription="@string/reorder_by_dragging"
+        android:padding="@dimen/medium_margin"
+        android:src="@drawable/ic_drag_handle_vector"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/timer_play_pause"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

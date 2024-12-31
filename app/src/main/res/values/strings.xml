@@ -18,6 +18,7 @@
     <string name="swipe_right_to_dismiss">Swipe right to Dismiss, or left to Snooze.</string>
     <string name="sort_by_creation_order">Creation order</string>
     <string name="sort_by_alarm_time">Alarm time</string>
+    <string name="sort_by_timer_duration">Timer duration</string>
     <string name="sort_by_day_and_alarm_time">Day and Alarm time</string>
     <string name="analogue_clock">Analogue clock</string>
     <string name="digital_clock">Digital clock</string>
@@ -32,6 +33,7 @@
     <string name="add_timer">Add timer</string>
     <string name="upcoming_alarm">Upcoming alarm</string>
     <string name="early_alarm_dismissal">Early alarm dismissal</string>
+    <string name="reorder_by_dragging">Reorder items by dragging</string>
 
     <!-- Timer -->
     <string name="timers_notification_msg">Timers are running</string>

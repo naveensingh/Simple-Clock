@@ -20,6 +20,7 @@ import org.fossify.commons.extensions.getProperBackgroundColor
 import org.fossify.commons.extensions.getProperTextColor
 import org.fossify.commons.extensions.toast
 import org.fossify.commons.extensions.updateTextColors
+import org.fossify.commons.helpers.SORT_BY_CUSTOM
 import org.fossify.commons.helpers.SORT_BY_DATE_CREATED
 import org.fossify.commons.helpers.ensureBackgroundThread
 import org.fossify.commons.models.AlarmSound
@@ -84,6 +85,25 @@ class AlarmFragment : Fragment(), ToggleAlarmInterface {
             }.thenBy {
                 it.timeInMinutes
             })
+
+            SORT_BY_CUSTOM -> {
+                val customAlarmsSortOrderString = activity?.config?.alarmsCustomSorting
+                if (customAlarmsSortOrderString == "") {
+                    alarms.sortBy { it.id }
+                } else {
+                    val customAlarmsSortOrder: List<Int> = customAlarmsSortOrderString?.split(", ")?.map { it.toInt() }!!
+                    val alarmsIdValueMap = alarms.associateBy { it.id }
+
+                    val sortedAlarms: ArrayList<Alarm> = ArrayList()
+                    customAlarmsSortOrder.map { id ->
+                        if (alarmsIdValueMap[id] != null) {
+                            sortedAlarms.add(alarmsIdValueMap[id] as Alarm)
+                        }
+                    }
+
+                    alarms = (sortedAlarms + alarms.filter { it !in sortedAlarms }) as ArrayList<Alarm>
+                }
+            }
         }
         context?.getEnabledAlarms { enabledAlarms ->
             if (enabledAlarms.isNullOrEmpty()) {
