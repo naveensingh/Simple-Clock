@@ -141,7 +141,7 @@ class MainActivity : SimpleActivity() {
 
     private fun refreshMenuItems() {
         binding.mainToolbar.menu.apply {
-            findItem(R.id.sort).isVisible = binding.viewPager.currentItem == TAB_ALARM
+            findItem(R.id.sort).isVisible = binding.viewPager.currentItem == getTabIndex(TAB_ALARM)
             findItem(R.id.more_apps_from_us).isVisible = !resources.getBoolean(org.fossify.commons.R.bool.hide_google_relations)
         }
     }
@@ -149,7 +149,7 @@ class MainActivity : SimpleActivity() {
     override fun onNewIntent(intent: Intent) {
         if (intent.extras?.containsKey(OPEN_TAB) == true) {
             val tabToOpen = intent.getIntExtra(OPEN_TAB, TAB_CLOCK)
-            binding.viewPager.setCurrentItem(tabToOpen, false)
+            binding.viewPager.setCurrentItem(getTabIndex(tabToOpen), false)
             if (tabToOpen == TAB_TIMER) {
                 val timerId = intent.getIntExtra(TIMER_ID, INVALID_TIMER_ID)
                 (binding.viewPager.adapter as ViewPagerAdapter).updateTimerPosition(timerId)
@@ -179,7 +179,7 @@ class MainActivity : SimpleActivity() {
     private fun storeNewAlarmSound(resultData: Intent) {
         val newAlarmSound = storeNewYourAlarmSound(resultData)
 
-        when (binding.viewPager.currentItem) {
+        when (getTabIndex(binding.viewPager.currentItem)) {
             TAB_ALARM -> getViewPagerAdapter()?.updateAlarmTabAlarmSound(newAlarmSound)
             TAB_TIMER -> getViewPagerAdapter()?.updateTimerTabAlarmSound(newAlarmSound)
         }
@@ -199,7 +199,7 @@ class MainActivity : SimpleActivity() {
             refreshMenuItems()
         }
 
-        val tabToOpen = intent.getIntExtra(OPEN_TAB, config.lastUsedViewPagerPage)
+        val tabToOpen = intent.getIntExtra(OPEN_TAB, config.defaultTab)
         intent.removeExtra(OPEN_TAB)
         if (tabToOpen == TAB_TIMER) {
             val timerId = intent.getIntExtra(TIMER_ID, INVALID_TIMER_ID)
@@ -211,7 +211,7 @@ class MainActivity : SimpleActivity() {
         }
 
         binding.viewPager.offscreenPageLimit = TABS_COUNT - 1
-        binding.viewPager.currentItem = tabToOpen
+        binding.viewPager.currentItem = getTabIndex(tabToOpen)
     }
 
     private fun setupTabs() {
@@ -297,5 +297,15 @@ class MainActivity : SimpleActivity() {
         }
 
         startAboutActivity(R.string.app_name, licenses, BuildConfig.VERSION_NAME, faqItems, true)
+    }
+
+    private fun getTabIndex(tabId: Int): Int {
+        return when (tabId) {
+            TAB_CLOCK -> TAB_CLOCK_INDEX
+            TAB_ALARM -> TAB_ALARM_INDEX
+            TAB_STOPWATCH -> TAB_STOPWATCH_INDEX
+            TAB_TIMER -> TAB_TIMER_INDEX
+            else -> config.lastUsedViewPagerPage
+        }
     }
 }

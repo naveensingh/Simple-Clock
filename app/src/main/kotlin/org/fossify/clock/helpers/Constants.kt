@@ -50,10 +50,14 @@ const val EARLY_ALARM_DISMISSAL_INTENT_ID = 10002
 const val EARLY_ALARM_NOTIF_ID = 10003
 
 const val OPEN_TAB = "open_tab"
-const val TAB_CLOCK = 0
-const val TAB_ALARM = 1
-const val TAB_STOPWATCH = 2
-const val TAB_TIMER = 3
+const val TAB_CLOCK = 1
+const val TAB_ALARM = 2
+const val TAB_STOPWATCH = 4
+const val TAB_TIMER = 8
+const val TAB_CLOCK_INDEX = 0
+const val TAB_ALARM_INDEX = 1
+const val TAB_STOPWATCH_INDEX = 2
+const val TAB_TIMER_INDEX = 3
 const val TIMER_ID = "timer_id"
 const val INVALID_TIMER_ID = -1
 

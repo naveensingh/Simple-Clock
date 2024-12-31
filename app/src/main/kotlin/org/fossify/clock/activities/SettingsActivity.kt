@@ -2,15 +2,14 @@ package org.fossify.clock.activities
 
 import android.content.Intent
 import android.os.Bundle
+import org.fossify.clock.R
 import org.fossify.clock.databinding.ActivitySettingsBinding
 import org.fossify.clock.extensions.config
-import org.fossify.clock.helpers.DEFAULT_MAX_ALARM_REMINDER_SECS
-import org.fossify.clock.helpers.DEFAULT_MAX_TIMER_REMINDER_SECS
+import org.fossify.clock.helpers.*
+import org.fossify.commons.dialogs.RadioGroupDialog
 import org.fossify.commons.extensions.*
-import org.fossify.commons.helpers.IS_CUSTOMIZING_COLORS
-import org.fossify.commons.helpers.MINUTE_SECONDS
-import org.fossify.commons.helpers.NavigationIcon
-import org.fossify.commons.helpers.isTiramisuPlus
+import org.fossify.commons.helpers.*
+import org.fossify.commons.models.RadioItem
 import java.util.Locale
 import kotlin.system.exitProcess
 
@@ -34,6 +33,7 @@ class SettingsActivity : SimpleActivity() {
         setupCustomizeColors()
         setupUseEnglish()
         setupLanguage()
+        setupDefaultTab()
         setupPreventPhoneFromSleeping()
         setupSundayFirst()
         setupAlarmMaxReminder()
@@ -85,6 +85,34 @@ class SettingsActivity : SimpleActivity() {
             launchChangeAppLanguageIntent()
         }
     }
+
+    private fun setupDefaultTab() {
+        binding.settingsDefaultTab.text = getDefaultTabText()
+        binding.settingsDefaultTabHolder.setOnClickListener {
+            val items = arrayListOf(
+                RadioItem(TAB_CLOCK, getString(R.string.clock)),
+                RadioItem(TAB_ALARM, getString(org.fossify.commons.R.string.alarm)),
+                RadioItem(TAB_STOPWATCH, getString(R.string.stopwatch)),
+                RadioItem(TAB_TIMER, getString(R.string.timer)),
+                RadioItem(TAB_LAST_USED, getString(org.fossify.commons.R.string.last_used_tab))
+            )
+
+            RadioGroupDialog(this@SettingsActivity, items, config.defaultTab) {
+                config.defaultTab = it as Int
+                binding.settingsDefaultTab.text = getDefaultTabText()
+            }
+        }
+    }
+
+    private fun getDefaultTabText() = getString(
+        when (config.defaultTab) {
+            TAB_CLOCK -> R.string.clock
+            TAB_ALARM -> org.fossify.commons.R.string.alarm
+            TAB_STOPWATCH -> R.string.stopwatch
+            TAB_TIMER -> R.string.timer
+            else -> org.fossify.commons.R.string.last_used_tab
+        }
+    )
 
     private fun setupPreventPhoneFromSleeping() {
         binding.settingsPreventPhoneFromSleeping.isChecked = config.preventPhoneFromSleeping
