@@ -548,20 +548,24 @@ fun Context.getAlarmSelectedDaysString(bitMask: Int): String {
     }
 }
 
+fun Context.orderDaysList(days: List<Int>): List<Int> {
+    if (config.firstDayOfWeek > 0) {
+        val range = (config.firstDayOfWeek..6).toList() + (0..<config.firstDayOfWeek).toList()
+        return days.slice(range)
+    } else {
+        return days
+    }
+}
+
 fun Context.firstDayOrder(bitMask: Int): Int {
     if (bitMask == TODAY_BIT) return -2
     if (bitMask == TOMORROW_BIT) return -1
 
-    val dayBits = arrayListOf(MONDAY_BIT, TUESDAY_BIT, WEDNESDAY_BIT, THURSDAY_BIT, FRIDAY_BIT, SATURDAY_BIT, SUNDAY_BIT)
+    val dayBits = orderDaysList(arrayListOf(MONDAY_BIT, TUESDAY_BIT, WEDNESDAY_BIT, THURSDAY_BIT, FRIDAY_BIT, SATURDAY_BIT, SUNDAY_BIT))
 
-    val sundayFirst = baseConfig.isSundayFirst
-    if (sundayFirst) {
-        dayBits.moveLastItemToFront()
-    }
-
-    dayBits.forEach { bit ->
+    dayBits.forEachIndexed { i, bit ->
         if (bitMask and bit != 0) {
-            return if (bit == SUNDAY_BIT && sundayFirst) 0 else bit
+            return i
         }
     }
 

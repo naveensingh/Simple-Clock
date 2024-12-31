@@ -43,6 +43,7 @@ class MainActivity : SimpleActivity() {
         initFragments()
         setupTabs()
         updateWidgets()
+        setFirstDayOfTheWeek()
 
         getEnabledAlarms { enabledAlarms ->
             if (enabledAlarms.isNullOrEmpty()) {
@@ -297,5 +298,14 @@ class MainActivity : SimpleActivity() {
         }
 
         startAboutActivity(R.string.app_name, licenses, BuildConfig.VERSION_NAME, faqItems, true)
+    }
+
+    private fun setFirstDayOfTheWeek() {
+        // check existing config.isSundayFirst to migrate setting value
+        if (config.isSundayFirst) {
+            config.firstDayOfWeek = 6
+            // revert old setting to not run this code anymore
+            config.isSundayFirst = false
+        }
     }
 }

@@ -6,11 +6,13 @@ import org.fossify.clock.databinding.ActivitySettingsBinding
 import org.fossify.clock.extensions.config
 import org.fossify.clock.helpers.DEFAULT_MAX_ALARM_REMINDER_SECS
 import org.fossify.clock.helpers.DEFAULT_MAX_TIMER_REMINDER_SECS
+import org.fossify.commons.dialogs.RadioGroupDialog
 import org.fossify.commons.extensions.*
 import org.fossify.commons.helpers.IS_CUSTOMIZING_COLORS
 import org.fossify.commons.helpers.MINUTE_SECONDS
 import org.fossify.commons.helpers.NavigationIcon
 import org.fossify.commons.helpers.isTiramisuPlus
+import org.fossify.commons.models.RadioItem
 import java.util.Locale
 import kotlin.system.exitProcess
 
@@ -35,7 +37,7 @@ class SettingsActivity : SimpleActivity() {
         setupUseEnglish()
         setupLanguage()
         setupPreventPhoneFromSleeping()
-        setupSundayFirst()
+        setupStartWeekOn()
         setupAlarmMaxReminder()
         setupUseSameSnooze()
         setupSnoozeTime()
@@ -94,11 +96,24 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun setupSundayFirst() {
-        binding.settingsSundayFirst.isChecked = config.isSundayFirst
-        binding.settingsSundayFirstHolder.setOnClickListener {
-            binding.settingsSundayFirst.toggle()
-            config.isSundayFirst = binding.settingsSundayFirst.isChecked
+    private fun setupStartWeekOn() {
+        val items = arrayListOf(
+            RadioItem(6, getString(org.fossify.commons.R.string.sunday)),
+            RadioItem(0, getString(org.fossify.commons.R.string.monday)),
+            RadioItem(1, getString(org.fossify.commons.R.string.tuesday)),
+            RadioItem(2, getString(org.fossify.commons.R.string.wednesday)),
+            RadioItem(3, getString(org.fossify.commons.R.string.thursday)),
+            RadioItem(4, getString(org.fossify.commons.R.string.friday)),
+            RadioItem(5, getString(org.fossify.commons.R.string.saturday)),
+        )
+
+        binding.settingsStartWeekOn.text = resources.getStringArray(org.fossify.commons.R.array.week_days)[config.firstDayOfWeek]
+        binding.settingsStartWeekOnHolder.setOnClickListener {
+            RadioGroupDialog(this@SettingsActivity, items, config.firstDayOfWeek) { day ->
+                val firstDayOfWeek = day as Int
+                config.firstDayOfWeek = firstDayOfWeek
+                binding.settingsStartWeekOn.text = resources.getStringArray(org.fossify.commons.R.array.week_days)[config.firstDayOfWeek]
+            }
         }
     }
 
