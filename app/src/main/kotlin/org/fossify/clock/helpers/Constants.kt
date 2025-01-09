@@ -111,14 +111,14 @@ fun formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: Int, minut
 fun getTomorrowBit(): Int {
     val calendar = Calendar.getInstance()
     calendar.add(Calendar.DAY_OF_WEEK, 1)
-    val dayOfWeek = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7
-    return 2.0.pow(dayOfWeek).toInt()
+    val day = calendar.get(Calendar.DAY_OF_WEEK)
+    return getBitForCalendarDay(day)
 }
 
 fun getTodayBit(): Int {
     val calendar = Calendar.getInstance()
-    val dayOfWeek = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7
-    return 2.0.pow(dayOfWeek).toInt()
+    val day = calendar.get(Calendar.DAY_OF_WEEK)
+    return getBitForCalendarDay(day)
 }
 
 fun getBitForCalendarDay(day: Int): Int {
@@ -222,39 +222,37 @@ fun getAllTimeZones() = arrayListOf(
     MyTimeZone(89, "GMT+13:00 Tongatapu", "Pacific/Tongatapu")
 )
 
-fun getTimeUntilNextAlarm(alarmTimeInMinutes: Int, days: Int): Int? {
-    val calendar = Calendar.getInstance()
-    calendar.firstDayOfWeek = Calendar.MONDAY
-    val currentTimeInMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
-    val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - Calendar.MONDAY
+fun getTimeOfNextAlarm(alarmTimeInMinutes: Int, days: Int): Calendar? {
+    val nextAlarmTime = Calendar.getInstance()
+    nextAlarmTime.firstDayOfWeek = Calendar.MONDAY
 
-    var minTimeDifferenceInMinutes = Int.MAX_VALUE
+    val hour = alarmTimeInMinutes / 60
+    val minute = alarmTimeInMinutes % 60
 
-    for (i in 0..6) {
-        val alarmDayOfWeek = (currentDayOfWeek + i) % 7
-        if (isAlarmEnabledForDay(alarmDayOfWeek, days)) {
-            val timeDifferenceInMinutes = getTimeDifferenceInMinutes(currentTimeInMinutes, alarmTimeInMinutes, i)
-            if (timeDifferenceInMinutes < minTimeDifferenceInMinutes) {
-                minTimeDifferenceInMinutes = timeDifferenceInMinutes
-            }
+    nextAlarmTime.set(Calendar.HOUR_OF_DAY, hour)
+    nextAlarmTime.set(Calendar.MINUTE, minute)
+    nextAlarmTime.set(Calendar.SECOND, 0)
+    nextAlarmTime.set(Calendar.MILLISECOND, 0)
+
+    return when (days) {
+        TODAY_BIT -> {
+            // do nothing, alarm is today
+            nextAlarmTime
         }
-    }
-
-    return if (minTimeDifferenceInMinutes != Int.MAX_VALUE) {
-        minTimeDifferenceInMinutes
-    } else {
-        null
-    }
-}
-
-fun isAlarmEnabledForDay(day: Int, alarmDays: Int) = alarmDays.isBitSet(day)
-
-fun getTimeDifferenceInMinutes(currentTimeInMinutes: Int, alarmTimeInMinutes: Int, daysUntilAlarm: Int): Int {
-    val minutesInADay = 24 * 60
-    val minutesUntilAlarm = daysUntilAlarm * minutesInADay + alarmTimeInMinutes
-    return if (minutesUntilAlarm > currentTimeInMinutes) {
-        minutesUntilAlarm - currentTimeInMinutes
-    } else {
-        minutesInADay - (currentTimeInMinutes - minutesUntilAlarm)
+        TOMORROW_BIT -> {
+            nextAlarmTime.apply { add(Calendar.DAY_OF_MONTH, 1) }
+        }
+        else -> {
+            val now = Calendar.getInstance()
+            repeat(8) {
+                val currentDay = (nextAlarmTime.get(Calendar.DAY_OF_WEEK) + 5) % 7
+                if (days.isBitSet(currentDay) && now < nextAlarmTime) {
+                    return nextAlarmTime
+                } else {
+                    nextAlarmTime.add(Calendar.DAY_OF_MONTH, 1)
+                }
+            }
+            null
+        }
     }
 }

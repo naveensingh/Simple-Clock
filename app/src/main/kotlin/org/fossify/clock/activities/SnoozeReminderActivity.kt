@@ -9,6 +9,7 @@ import org.fossify.clock.extensions.setupAlarmClock
 import org.fossify.clock.helpers.ALARM_ID
 import org.fossify.commons.extensions.showPickSecondsDialog
 import org.fossify.commons.helpers.MINUTE_SECONDS
+import java.util.Calendar
 
 class SnoozeReminderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +19,7 @@ class SnoozeReminderActivity : AppCompatActivity() {
         hideNotification(id)
         showPickSecondsDialog(config.snoozeTime * MINUTE_SECONDS, true, cancelCallback = { dialogCancelled() }) {
             config.snoozeTime = it / MINUTE_SECONDS
-            setupAlarmClock(alarm, it)
+            setupAlarmClock(alarm, Calendar.getInstance().apply { add(Calendar.SECOND, it) })
             finishActivity()
         }
     }
